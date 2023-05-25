@@ -3,13 +3,15 @@ import csv
 
 conn = psycopg2.connect(
     host="localhost",
-    port="5432",
-    database="Cats",
+    port="5433",
+    database="asmaBI",
     user="postgres",
     password="postgres"
 )
 
 cursor = conn.cursor()
+
+cursor.execute("create table datos2017 (ZIP char(5));")
 
 with open('Datos2017.csv', 'r') as file:
     reader = csv.reader(file)
@@ -21,7 +23,7 @@ with open('Datos2017.csv', 'r') as file:
         pass  # Coloca aquí el código para procesar cada fila
 
 # Dentro del bucle for anterior, puedes ejecutar los comandos SQL para insertar los datos en las tablas de PostgreSQL. Utiliza el cursor para ejecutar los comandos de inserción:
-cursor.execute("INSERT INTO nombre_de_tabla (columna1, columna2, ...) VALUES (%s, %s, ...)", (valor1, valor2, ...))
+
 
 
 conn.commit()
