@@ -3,7 +3,7 @@ import csv
 
 conn = psycopg2.connect(
     host="localhost",
-    port="5433",
+    port="5432",
     database="asmaBI",
     user="postgres",
     password="postgres"
@@ -102,11 +102,11 @@ def agregarCombustible():
     cursor.execute("INSERT INTO combustibles (respuesta) VALUES ('No sabe/ No responde')")
     combustibles.append('No sabe/ No responde')
 
-def agregarAsma(asma,codL,hum,vent,fab,bus,con,comb):
-    cursor.execute("INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id)\
-                   VALUES ('"+asma+"',\
-                    "+codL+",1,"+hum+","+vent+","+fab+","+bus+
-                                ","+con+","+comb+")")
+def agregarAsma(asma, codL, hum, vent, fab, bus, con, comb):
+    cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('{asma}', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+
+
         
 
 agregarHumedad()
@@ -134,6 +134,23 @@ with open('Datos2017.csv', 'r') as file:
 for i in range(1, len(localidades.keys())+1):
     cursor.execute("INSERT INTO localidades (localidad) VALUES ('"+localidades[i]+"')")
 
+
+# Preprocesamiento de datos
+# Valores vacios para la columna localidad
+
+import pandas as pd
+
+# Lee el archivo Excel
+df = pd.read_csv('Datos2017.csv')
+
+# Reemplaza 'NA' con la moda en la columna deseada
+localidad = 'CODLOCALIDAD'
+moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
+
+combustible = 'NHCCP26'
+moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
+
+
 #Agregar registros
 with open('Datos2017.csv', 'r') as file:
     reader = csv.reader(file)
@@ -150,8 +167,10 @@ with open('Datos2017.csv', 'r') as file:
 
     for row in reader:
         codL=row[codLi]
-        if codL == 'NA':
-            codL = '1'
+        if codL == '':
+            codL = moda_localidad
+        elif codL == 'NA':
+            codL = moda_localidad
         hum=row[humi]
         if hum == '9':
             hum = '3'
@@ -162,9 +181,11 @@ with open('Datos2017.csv', 'r') as file:
         bus=row[busi]
         con=row[coni]
         comb=row[combi]
-        if comb == 'NA':
-            comb = '1'
         asma=row[asmai]
+        if comb == '':
+            comb = moda_combustible
+        elif comb == 'NA':
+            comb = moda_combustible
         agregarAsma(asma,codL,hum,vent,fab,bus,con,comb)
 
 
