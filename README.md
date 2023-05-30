@@ -6,6 +6,8 @@
 
 -Link del video: https://www.youtube.com/watch?v=0UJuhxIPr3Q
 
+La documentación del proyecto se encuentra en la carpteta docs
+
 ## Instrucciones para correr el ETL
 
 1. Clonar este repositorio
