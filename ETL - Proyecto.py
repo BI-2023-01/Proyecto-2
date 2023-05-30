@@ -214,7 +214,7 @@ moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
 combustible = 'NHCCP26'
 moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
 
-with open('Datos2021_no.csv', 'r') as file:
+with open('Datos2021_no.csv', 'r', encoding='ISO-8859-1') as file:
     reader = csv.reader(file)
     
     encabezados = next(reader)
@@ -260,7 +260,7 @@ moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
 combustible = 'NHCCP26'
 moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
 
-with open('Datos2021_si.csv', 'r') as file:
+with open('Datos2021_si.csv', 'r', encoding='ISO-8859-1') as file:
     reader = csv.reader(file)
     
     encabezados = next(reader)
