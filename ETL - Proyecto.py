@@ -3,7 +3,7 @@ import csv
 
 conn = psycopg2.connect(
     host="localhost",
-    port="5432",
+    port="5433",
     database="asmaBI",
     user="postgres",
     password="postgres"
@@ -45,7 +45,7 @@ cursor.execute("INSERT INTO fecha (ano) VALUES (2021)")
 def agregarLocalidad(localidad,codL):
     if localidad != 'NA':
         if localidad not in localidades:
-            localidades[int(codL)]=localidad
+            localidades[int(codL)]=localidad.upper()
 
 def agregarHumedad():
     cursor.execute("INSERT INTO humedad (respuesta) VALUES ('Si')")
@@ -106,6 +106,9 @@ def agregarAsma(asma, codL, hum, vent, fab, bus, con, comb):
     cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
                VALUES ('{asma}', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
 
+def agregarAsma2(asma, codL, hum, vent, fab, bus, con, comb):
+    cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('{asma}', {codL}, 2, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
 
         
 
@@ -150,7 +153,6 @@ moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
 combustible = 'NHCCP26'
 moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
 
-
 #Agregar registros
 with open('Datos2017.csv', 'r') as file:
     reader = csv.reader(file)
@@ -188,7 +190,97 @@ with open('Datos2017.csv', 'r') as file:
             comb = moda_combustible
         agregarAsma(asma,codL,hum,vent,fab,bus,con,comb)
 
+# Lee el archivo Excel
+df = pd.read_csv('Datos2021_no.csv', encoding='ISO-8859-1')
 
+# Reemplaza 'NA' con la moda en la columna deseada
+localidad = 'COD_LOCALIDAD'
+moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
+
+combustible = 'NHCCP26'
+moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
+
+with open('Datos2021_no.csv', 'r') as file:
+    reader = csv.reader(file)
+    
+    encabezados = next(reader)
+    codLi = encabezados.index('COD_LOCALIDAD')
+    humi = encabezados.index('NVCBP8A')
+    venti = encabezados.index('NVCBP8G')
+    fabri = encabezados.index('NVCBP14A')
+    busi = encabezados.index('NVCBP14D')
+    coni = encabezados.index('NVCBP15D')
+    combi = encabezados.index('NHCCP26')
+    asmai = encabezados.index('NPCFP14F')
+
+    for row in reader:
+        codL=row[codLi]
+        if codL == '':
+            codL = moda_localidad
+        elif codL == 'NA':
+            codL = moda_localidad
+        hum=row[humi]
+        if hum == '9':
+            hum = '3'
+        vent=row[venti]
+        if vent == '9':
+            vent = '3'
+        fab=row[fabri]
+        bus=row[busi]
+        con=row[coni]
+        comb=row[combi]
+        asma=row[asmai]
+        if comb == '':
+            comb = moda_combustible
+        elif comb == 'NA':
+            comb = moda_combustible
+        agregarAsma2(asma,codL,hum,vent,fab,bus,con,comb)
+
+# Lee el archivo Excel
+df = pd.read_csv('Datos2021_si.csv', encoding='ISO-8859-1')
+
+# Reemplaza 'NA' con la moda en la columna deseada
+localidad = 'COD_LOCALIDAD'
+moda_localidad = str(int(float(pd.Series.mode(df[localidad])[0])))
+
+combustible = 'NHCCP26'
+moda_combustible = str(int(float(pd.Series.mode(df[combustible])[0])))
+
+with open('Datos2021_si.csv', 'r') as file:
+    reader = csv.reader(file)
+    
+    encabezados = next(reader)
+    codLi = encabezados.index('COD_LOCALIDAD')
+    humi = encabezados.index('NVCBP8A')
+    venti = encabezados.index('NVCBP8G')
+    fabri = encabezados.index('NVCBP14A')
+    busi = encabezados.index('NVCBP14D')
+    coni = encabezados.index('NVCBP15D')
+    combi = encabezados.index('NHCCP26')
+    asmai = encabezados.index('NPCFP14F')
+
+    for row in reader:
+        codL=row[codLi]
+        if codL == '':
+            codL = moda_localidad
+        elif codL == 'NA':
+            codL = moda_localidad
+        hum=row[humi]
+        if hum == '9':
+            hum = '3'
+        vent=row[venti]
+        if vent == '9':
+            vent = '3'
+        fab=row[fabri]
+        bus=row[busi]
+        con=row[coni]
+        comb=row[combi]
+        asma=row[asmai]
+        if comb == '':
+            comb = moda_combustible
+        elif comb == 'NA':
+            comb = moda_combustible
+        agregarAsma2(asma,codL,hum,vent,fab,bus,con,comb)
 
 conn.commit()
 
