@@ -103,12 +103,26 @@ def agregarCombustible():
     combustibles.append('No sabe/ No responde')
 
 def agregarAsma(asma, codL, hum, vent, fab, bus, con, comb):
-    cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
-               VALUES ('{asma}', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    if asma == '1':
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('Si', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    elif asma == '2':
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('No', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    else:
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('No sabe/ No responde', {codL}, 1, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
 
 def agregarAsma2(asma, codL, hum, vent, fab, bus, con, comb):
-    cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
-               VALUES ('{asma}', {codL}, 2, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    if asma == '1':
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('Si', {codL}, 2, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    elif asma == '2':
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('No', {codL}, 2, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
+    else:
+        cursor.execute(f"INSERT INTO asma (asma, localidad_id, fecha_id, humedad_id, ventilacion_id, fabricas_id, buses_id, contaminacionAire_id, combustibles_id) \
+               VALUES ('No sabe/ No responde', {codL}, 2, '{hum}', '{vent}', '{fab}', '{bus}', '{con}', {comb})")
 
         
 
